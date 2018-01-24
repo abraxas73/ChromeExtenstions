@@ -1,0 +1,60 @@
+<!doctype html>
+<!--
+ This page is shown when the extension button is clicked, because the
+ "browser_action" field in manifest.json contains the "default_popup" key with
+ value "popup.html".
+ -->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Cryptocurrency Handler</title>
+    <style type="text/css">
+      body {
+        margin: 10px;
+        white-space: nowrap;
+      }
+
+      h1 {
+        font-size: 15px;
+      }
+
+      #container {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+      }
+    </style>
+
+    <!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      -
+      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
+    -->
+    <!-- <script src="popup.js"></script> -->
+    <script src="injector.js"></script>
+  </head>
+
+  <body>
+    <h1>Your Decision Supporter</h1>
+    <div id="container">
+      <!--
+      <span>Choose a color</span>
+      <select id="dropdown">
+        <option selected disabled hidden value=''></option>
+        <option value="white">White</option>
+        <option value="pink">Pink</option>
+        <option value="green">Green</option>
+        <option value="yellow">Yellow</option>
+        <option value="BTC">BTC</option>
+        <option value="XRP">XRP</option>
+      </select>
+      -->
+      <input id='inputSearch' name='inputSearch' type="text" ><input name="btnSearch" id="btnSearch" type="button" value="Go" /><input name="btnClose" id="btnClose" type="button" value="Close" />
+      
+    </div>
+    <div id='message'>Search Result Will be displayed</div>
+    <div id='message2'>The decision will be made</div>
+    <div id='message3'>The decision will be made</div>
+  </body>
+</html>

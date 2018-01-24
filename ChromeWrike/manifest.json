@@ -1,0 +1,21 @@
+{
+    "manifest_version": 2,
+  
+    "name": "Wrike-JIRA Integration",
+    "description": "This extension allows the user to search JIRA task from current Wrike task.",
+    "version": "1.0",
+  
+    "browser_action": {
+      "default_icon": "favicon.png",
+      "default_popup": "popup.html",
+      "default_title": "JIRA search"
+    },
+    "permissions": [
+      "activeTab",
+      "storage",
+      "cookies",
+      "tabs",
+      "http://*/*", 
+      "https://*/*"
+    ]
+  }

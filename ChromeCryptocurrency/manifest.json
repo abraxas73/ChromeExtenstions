@@ -1,0 +1,21 @@
+{
+    "manifest_version": 2,
+  
+    "name": "Cryptocurrency Price/Calculation",
+    "description": "Cryptocurrency Price/Calculation",
+    "version": "1.0",
+  
+    "browser_action": {
+      "default_icon": "hw_icon16.png",
+      "default_popup": "popup.html",
+      "default_title": "Cryptocurrency Price/Calculation"
+    },
+    "permissions": [
+      "activeTab",
+      "storage",
+      "cookies",
+      "tabs",
+      "http://*/*", 
+      "https://*/*"
+    ]
+  }
