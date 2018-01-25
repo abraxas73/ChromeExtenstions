@@ -59,7 +59,7 @@ function getJIRATasks(searchWord) {
     
     var encodedSearchWord = encodeURIComponent(searchWord);
 
-    var getUrl = 'https://jira.astorm.com/rest/api/2/search?jql=Summary~' + encodedSearchWord +  ' AND status!=Closed+order+by+status+asc,priority&fields=project,id,key,summary,status,priority,duedate&maxResults=100';
+    var getUrl = 'https://jira.astorm.com/rest/api/2/search?jql=Summary~\'' + encodedSearchWord +  '\' AND status!=Closed+order+by+status+asc,priority&fields=project,id,key,summary,status,priority,duedate&maxResults=100';
 
     // Set up an asynchronous AJAX POST request
     var xhr = new XMLHttpRequest();
