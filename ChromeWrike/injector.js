@@ -67,7 +67,7 @@ function getJIRATasks(searchWord) {
 
     
     // Set correct header for form data 
-    //xhr.setRequestHeader('Content-type', 'application/json');
+    xhr.setRequestHeader('Content-type', 'application/json');
     xhr.setRequestHeader('Authorization', 'Basic YWJyYXhhczpMYXN0NHRpb24h'); // 이거 내꺼.
     
     // Handle request state change events
@@ -83,10 +83,44 @@ function getJIRATasks(searchWord) {
                 //console.log("###" + jsonText);
                 var returnHTML = parseJIRASearchResult(jsonText);
                 message.innerHTML = returnHTML;
+                logoutJIRA();
                 //window.setTimeout(window.close, 1000);
             } else {
                 // Show what went wrong
                 message.innerText = searchWord + ', Error : ' + xhr.statusText;
+            }
+        }
+    };
+
+    // Send the request and set status
+    xhr.send();
+}
+
+
+
+function logoutJIRA() {
+    
+    
+    var getUrl = 'https://jira.astorm.com/rest/auth/1/session';
+
+    // Set up an asynchronous AJAX POST request
+    var xhr = new XMLHttpRequest();
+    xhr.open('DELETE', getUrl, true);
+
+    
+    // Set correct header for form data 
+    xhr.setRequestHeader('Content-type', 'application/json');
+    xhr.setRequestHeader('Authorization', 'Basic YWJyYXhhczpMYXN0NHRpb24h'); // 이거 내꺼.
+    
+    // Handle request state change events
+    xhr.onreadystatechange = function() { 
+        // If the request completed
+        if (xhr.readyState == 4) {
+            //statusDisplay.innerHTML = '';
+            if (xhr.status == 200) {
+                console.log("Succesfully loggedout");
+            } else {
+            
             }
         }
     };
