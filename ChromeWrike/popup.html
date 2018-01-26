@@ -9,17 +9,20 @@
     <title>Wrike-JIRA Integration</title>
     <style type="text/css">
       body {
-        margin: 10px;
         white-space: nowrap;
       }
 
       h1 {
         font-size: 15px;
       }
+      #jira_login {
+        margin: 10px 0px 10px 0px;
+        align-items: center;
+        justify-content: space-between;
+      }
 
       #container {
         align-items: center;
-        display: flex;
         justify-content: space-between;
       }
     </style>
@@ -36,21 +39,12 @@
 
   <body>
     <h1>Wrike-Jira Integration</h1>
+    <div id="jira_login">JIRA ID <input id='jira_id' name='jira_id' type="text" > JIRA PW <input id='jira_pw' name='jira_pw' type="password" >
+    </div>
     <div id="container">
-      <!--
-      <span>Choose a color</span>
-      <select id="dropdown">
-        <option selected disabled hidden value=''></option>
-        <option value="white">White</option>
-        <option value="pink">Pink</option>
-        <option value="green">Green</option>
-        <option value="yellow">Yellow</option>
-        <option value="BTC">BTC</option>
-        <option value="XRP">XRP</option>
-      </select>
-      -->
-      <input id='inputSearch' name='inputSearch' type="text" ><input name="btnSearch" id="btnSearch" type="button" value="Go" /><input name="btnClose" id="btnClose" type="button" value="Close" />
-      
+      <input id='inputSearch' name='inputSearch' type="text" >
+      <input name="btnSearch" id="btnSearch" type="button" value="Go" />
+      <input name="btnClose" id="btnClose" type="button" value="Close" />      
     </div>
     <div id='message'>Search Result Will be displayed</div>
   </body>

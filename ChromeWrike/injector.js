@@ -17,30 +17,7 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
     }
 });
   
-function onWindowLoad() {
 
-    var message = document.querySelector('#message');
-    var inputSearch = document.querySelector('input[name="inputSearch"]');
-    inputSearch.value = 'Input Search Words';
-
-    var btnSearch = document.getElementById('btnSearch');
-    var btnClose = document.getElementById('btnClose');
-
-    initialAutoSearch();
-
-    // Ensure the background color is changed and saved when the dropdown
-    // selection changes.
-    btnSearch.addEventListener('click', () => {
-        console.log("Searching.. " + document.getElementById('inputSearch').value);
-        getJIRATasks(document.getElementById('inputSearch').value);
-    });
-
-    btnClose.addEventListener('click', () => {
-        window.close();
-    });
-    
-
-}
 
 function initialAutoSearch() {
     chrome.tabs.executeScript(null, {
@@ -56,7 +33,10 @@ function initialAutoSearch() {
 }
 
 function getJIRATasks(searchWord) {
-    
+    var jiraID = document.getElementById('jira_id');
+    var jiraPW = document.getElementById('jira_pw');
+    var encodedCredential = btoa( jiraID.value + ":" + jiraPW.value);
+
     var encodedSearchWord = encodeURIComponent(searchWord);
 
     var getUrl = 'https://jira.astorm.com/rest/api/2/search?jql=Summary~\'' + encodedSearchWord +  '\' AND status!=Closed+order+by+status+asc,priority&fields=project,id,key,summary,status,priority,duedate&maxResults=100';
@@ -68,8 +48,9 @@ function getJIRATasks(searchWord) {
     
     // Set correct header for form data 
     xhr.setRequestHeader('Content-type', 'application/json');
-    xhr.setRequestHeader('Authorization', 'Basic YWJyYXhhczpMYXN0NHRpb24h'); // 이거 내꺼.
-    
+    //xhr.setRequestHeader('Authorization', 'Basic YWJyYXhhczpMYXN0NHRpb24h'); // 이거 내꺼.
+    xhr.setRequestHeader('Authorization', 'Basic ' + encodedCredential); // 이거 내꺼.
+    console.log('Basic ' + encodedCredential);
     // Handle request state change events
     xhr.onreadystatechange = function() { 
         // If the request completed
@@ -83,11 +64,12 @@ function getJIRATasks(searchWord) {
                 //console.log("###" + jsonText);
                 var returnHTML = parseJIRASearchResult(jsonText);
                 message.innerHTML = returnHTML;
-                logoutJIRA();
+                //logoutJIRA();
                 //window.setTimeout(window.close, 1000);
             } else {
                 // Show what went wrong
-                message.innerText = searchWord + ', Error : ' + xhr.statusText;
+                message.innerText = searchWord + ', Error : ' ;
+                console.log( xhr.statusText );
             }
         }
     };
@@ -151,6 +133,77 @@ function parseJIRASearchResult(jsonText) {
     }
 
     return returnHTML;
+}
+
+function saveCredential() {
+    var jiraID = document.getElementById('jira_id');
+    var jiraPW = document.getElementById('jira_pw');
+
+    var credential = {};
+    credential.id = jiraID.value;
+    credential.pw = jiraPW.value;
+    // See https://developer.chrome.com/apps/storage#type-StorageArea. We omit the
+    // optional callback since we don't need to perform any action once the
+    // background color is saved.
+    chrome.storage.sync.set({'jira_credential':credential});
+}
+
+function getSavedCredential(key, callback) {
+    // See https://developer.chrome.com/apps/storage#type-StorageArea. We check
+    // for chrome.runtime.lastError to ensure correctness even when the API call
+    // fails.
+    chrome.storage.sync.get('jira_credential', (credential) => {
+        console.log("Get from Chrome storage ");
+        console.log(credential);
+        callback(chrome.runtime.lastError ? null : credential['jira_credential']);
+    });
+}
+
+function onWindowLoad() {
+
+    var message = document.querySelector('#message');
+    var inputSearch = document.querySelector('input[name="inputSearch"]');
+    inputSearch.value = 'Input Search Words';
+
+    var btnSearch = document.getElementById('btnSearch');
+    var btnClose = document.getElementById('btnClose');
+
+    var jiraID = document.getElementById('jira_id');
+    var jiraPW = document.getElementById('jira_pw');
+
+    getSavedCredential('jira_credential', (credential) => {
+        if (credential) {
+            jiraID.value = credential.id;
+            jiraPW.value = credential.pw;
+        }
+      });
+
+    initialAutoSearch();
+
+    inputSearch.addEventListener('keypress', (event) => {
+        if(event.keyCode == 13) {
+            getJIRATasks(document.getElementById('inputSearch').value);
+        }
+    });
+
+    btnSearch.addEventListener('click', () => {
+        console.log("Searching.. " + document.getElementById('inputSearch').value);
+        getJIRATasks(document.getElementById('inputSearch').value);
+    });
+
+    btnClose.addEventListener('click', () => {
+        window.close();
+    });
+
+    jiraID.addEventListener('blur', () => {
+        saveCredential();
+    });
+
+    jiraPW.addEventListener('blur', () => {
+        saveCredential();
+    });
+    
+
 }
 
 window.onload = onWindowLoad;
